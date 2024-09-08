@@ -32,7 +32,7 @@ pub fn sign_query_string(query_string: &str, secret: &str) -> Result<String, App
 ///
 ///
 fn bytes_to_hex(bytes: Vec<u8>) -> String {
-    bytes.iter().map(|byte| format!("{:02x}", byte)).collect()
+    bytes.iter().map(|byte| format!("{:02x}", byte)).collect::<String>()
 }
 
 ///
@@ -47,14 +47,14 @@ fn bytes_to_hex(bytes: Vec<u8>) -> String {
 ///
 ///
 pub fn build_private_headers(
+    api_key: &str,
     signature: &str,
     timestamp: u128,
-    api_key: &str,
     recv_window: &str,
 ) -> HeaderMap {
     let mut headers = HeaderMap::new();
-    headers.insert("X-BAPI-API-KEY", HeaderValue::from_str(&api_key).unwrap());
-    headers.insert("X-BAPI-SIGN", HeaderValue::from_str(&signature).unwrap());
+    headers.insert("X-BAPI-API-KEY", HeaderValue::from_str(api_key).unwrap());
+    headers.insert("X-BAPI-SIGN", HeaderValue::from_str(signature).unwrap());
     headers.insert("X-BAPI-SIGN-TYPE", HeaderValue::from_static("2"));
     headers.insert(
         "X-BAPI-TIMESTAMP",
@@ -62,7 +62,7 @@ pub fn build_private_headers(
     );
     headers.insert(
         "X-BAPI-RECV-WINDOW",
-        HeaderValue::from_str(&recv_window).unwrap(),
+        HeaderValue::from_str(recv_window).unwrap(),
     );
     headers.insert(CONTENT_TYPE, HeaderValue::from_static("application/json"));
 
